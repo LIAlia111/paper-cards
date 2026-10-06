@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Noto+Serif+SC:wght@700;900&family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
+<style>
+  /* theme: white desk paperwork — black ink, one orange marker (Lief's cap colour), handwritten notes, real paper objects */
+  :root { --ink: #161514; --dim: #6d6a64; --o: #ff5b14; --hl: rgba(255,91,20,.28); --paper: #fffefb; --line: #d9d5cc; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #888; font-family: "Microsoft YaHei", sans-serif; color: var(--ink); }
+  .board { width: 1600px; height: 1000px; position: relative; overflow: hidden; margin: 0 0 40px; background: #fff; }
+  .board > * { position: absolute; }
+  .serif { font-family: "Noto Serif SC", serif; }
+  .hand { font-family: "Long Cang", "STXingkai", cursive; color: var(--o); font-weight: 400; }
+  .mono { font-family: "JetBrains Mono", Consolas, monospace; }
+  .kick { left: 72px; top: 64px; font: 800 18px "JetBrains Mono", monospace; letter-spacing: .2em; color: var(--dim); }
+  .kick b { color: var(--o); }
+  h1 { left: 72px; top: 100px; font-family: "Noto Serif SC", serif; font-size: 66px; font-weight: 900; line-height: 1.18; letter-spacing: -.01em; }
+  .mk { background: linear-gradient(transparent 58%, var(--hl) 58%, var(--hl) 92%, transparent 92%); padding: 0 4px; }
+  .foot { left: 72px; right: 72px; bottom: 34px; display: flex; justify-content: space-between; font: 500 16px "JetBrains Mono", monospace; color: var(--dim); border-top: 1.5px solid var(--ink); padding-top: 12px; }
+  .sheet { background: var(--paper); box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 14px 34px rgba(40,30,10,.10); }
+  .tape { position: absolute; width: 120px; height: 34px; background: rgba(236,226,200,.75); box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+  .note { position: absolute; font-family: "Long Cang", cursive; color: var(--o); line-height: 1.1; white-space: nowrap; }
+  svg.scribble { position: absolute; overflow: visible; }
+  svg.scribble path { fill: none; stroke: var(--o); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* 1: badge on a lanyard */
+  .strap { left: 1262px; top: -20px; width: 46px; height: 312px; background: var(--o); transform: rotate(3deg); transform-origin: top; }
+  .strap::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: -18px; height: 34px; border: 5px solid #9a958c; border-radius: 6px; }
+  .badge { left: 1068px; top: 300px; width: 450px; height: 610px; border-radius: 16px; transform: rotate(3deg); overflow: hidden; border: 1.5px solid #e2ded5; }
+  .badge .slot { position: absolute; left: 50%; top: 16px; width: 90px; height: 14px; margin-left: -45px; border-radius: 7px; background: #fff; border: 1.5px solid #cfcac0; }
+  .badge .head { margin-top: 44px; background: var(--ink); color: #fff; font: 900 26px "Noto Serif SC"; padding: 14px 26px; display: flex; justify-content: space-between; align-items: baseline; }
+  .badge .head span { font: 800 15px "JetBrains Mono"; color: var(--o); letter-spacing: .15em; }
+  .badge .photo { position: absolute; left: 26px; top: 128px; width: 132px; height: 160px; border: 1.5px solid var(--ink); display: grid; place-items: center; background: #f4f1ea; }
+  .badge .photo i { width: 62px; height: 62px; border-radius: 50%; background: var(--ink); }
+  .badge .photo i::after { content: ""; display: block; width: 20px; height: 20px; border-radius: 50%; background: var(--o); margin: 21px; }
+  .badge .name { position: absolute; left: 176px; top: 132px; font: 900 44px "Noto Serif SC"; }
+  .badge .name small { display: block; font: 800 15px "JetBrains Mono"; color: var(--dim); letter-spacing: .1em; }
+  .badge dl { position: absolute; left: 26px; right: 22px; top: 312px; display: grid; grid-template-columns: 62px 1fr; gap: 10px 6px; font-size: 21px; white-space: nowrap; }
+  .badge dt { font: 800 15px "JetBrains Mono"; color: var(--dim); padding-top: 4px; letter-spacing: .1em; }
+  .badge dd { font-weight: 800; border-bottom: 1px dotted var(--line); padding-bottom: 6px; }
+  .badge .bar { position: absolute; left: 26px; right: 26px; bottom: 20px; height: 30px; background: repeating-linear-gradient(90deg, var(--ink) 0 3px, transparent 3px 6px, var(--ink) 6px 7px, transparent 7px 11px, var(--ink) 11px 15px, transparent 15px 17px); }
+  .terms { left: 72px; top: 318px; width: 900px; }
+  .terms h3 { font: 900 30px "Noto Serif SC"; margin-bottom: 8px; }
+  .terms .row { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1.5px solid var(--ink); padding: 8px 0; font-size: 27px; font-weight: 800; }
+  .terms .row b { font: 900 40px "Noto Serif SC"; }
+  .terms .fine { margin-top: 20px; font-size: 22px; line-height: 1.6; font-weight: 600; color: #3a3833; padding-left: 22px; border-left: 4px solid var(--o); }
+  .terms .fine u { text-decoration: none; background: linear-gradient(transparent 60%, var(--hl) 60%); font-weight: 900; color: var(--ink); }
+  .eq { left: 72px; top: 766px; display: flex; align-items: center; gap: 18px; font: 900 28px "Noto Serif SC"; }
+  .eq div { border: 2px solid var(--ink); padding: 12px 22px; background: #fff; }
+  .eq b { font: 400 54px "Long Cang"; color: var(--o); line-height: 1; }
+
+  /* 2: three resumes */
+  .cv { top: 300px; width: 452px; height: 600px; padding: 34px 32px 0; }
+  .cv h4 { font: 800 30px "JetBrains Mono"; letter-spacing: -.02em; }
+  .cv .meta { font: 500 17px "JetBrains Mono"; color: var(--dim); margin: 8px 0 14px; padding-bottom: 14px; border-bottom: 1.5px solid var(--ink); }
+  .cv .k { font: 800 14px "JetBrains Mono"; color: var(--dim); letter-spacing: .2em; margin-top: 16px; }
+  .cv .v { font-size: 23px; font-weight: 700; line-height: 1.45; margin-top: 2px; }
+  .cv .verdict { position: absolute; left: 32px; right: 32px; bottom: 30px; font: 900 30px "Noto Serif SC"; padding-top: 14px; border-top: 1.5px dashed var(--ink); }
+  .stamp { position: absolute; color: var(--o); border: 6px double var(--o); border-radius: 50%; width: 170px; height: 170px; display: grid; place-items: center; font: 900 54px "Noto Serif SC"; transform: rotate(-14deg); opacity: .9; mix-blend-mode: multiply;
+    -webkit-mask: radial-gradient(circle at 30% 40%, #000 60%, transparent 61%) , repeating-linear-gradient(35deg, #000 0 7px, rgba(0,0,0,.55) 7px 9px); -webkit-mask-composite: source-over; }
+  .clip { position: absolute; top: -22px; right: 56px; width: 34px; height: 86px; border: 5px solid #9a958c; border-radius: 17px; }
+
+  /* 3: receipt */
+  .rcpt { left: 72px; right: 72px; top: 276px; padding: 24px 44px 34px; }
+  .rcpt::after { content: ""; position: absolute; left: 0; right: 0; bottom: -14px; height: 14px; background: linear-gradient(-45deg, transparent 10px, var(--paper) 0) 0 0/20px 14px, linear-gradient(45deg, transparent 10px, var(--paper) 0) 0 0/20px 14px; background: conic-gradient(from -45deg at 50% 0, var(--paper) 90deg, transparent 0) 0 0/22px 14px; }
+  .rcpt .hdr { display: flex; justify-content: space-between; font: 800 19px "JetBrains Mono"; border-bottom: 2px dashed var(--ink); padding-bottom: 14px; margin-bottom: 6px; }
+  .line { display: grid; grid-template-columns: 430px 1fr 170px; align-items: center; gap: 26px; padding: 9px 0; border-bottom: 1px dotted #b9b4aa; }
+  .line .n { font-size: 27px; font-weight: 800; }
+  .line .n small { display: block; font: 500 16px "JetBrains Mono"; color: var(--dim); margin-top: 2px; }
+  .line .b { height: 28px; min-width: 6px; border: 2px solid var(--ink); background: repeating-linear-gradient(-45deg, var(--ink) 0 2px, transparent 2px 8px); }
+  .line.big .b { border-color: var(--o); background: repeating-linear-gradient(-45deg, var(--o) 0 3px, transparent 3px 8px); }
+  .line .p { font: 900 38px "Noto Serif SC"; text-align: right; }
+  .line.big .p { color: var(--o); }
+  .rcpt .fine { margin-top: 12px; font: 500 16px/1.55 "JetBrains Mono"; color: var(--dim); }
+
+  /* 4: quote + sticky note */
+  .quote { left: 72px; top: 300px; width: 930px; padding: 30px 40px 18px; }
+  .quote .qh { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 3px double var(--ink); padding-bottom: 12px; font: 900 30px "Noto Serif SC"; }
+  .quote .qh span { font: 800 15px "JetBrains Mono"; color: var(--dim); letter-spacing: .2em; }
+  .post { display: grid; grid-template-columns: 76px 1fr; gap: 16px; padding: 22px 0; border-bottom: 1px dotted #b9b4aa; align-items: center; }
+  .post i { font: 900 46px "Noto Serif SC"; font-style: normal; color: var(--o); }
+  .post b { font: 900 32px "Noto Serif SC"; } .post p { font-size: 21px; color: #4a4741; font-weight: 600; margin-top: 4px; }
+  .sticky { left: 1060px; top: 286px; width: 466px; height: 540px; background: #ffe8d6; padding: 40px 38px; transform: rotate(2.5deg); box-shadow: 0 2px 2px rgba(0,0,0,.06), 0 18px 30px rgba(120,60,10,.14); }
+  .sticky .row { border-bottom: 1.5px solid rgba(22,21,20,.25); padding: 10px 0 12px; }
+  .sticky small { display: block; font: 400 30px "Long Cang"; color: #8a5a3a; }
+  .sticky b { font: 900 44px "Noto Serif SC"; }
+  .sticky .anchor b { color: var(--o); }
+  .redline { left: 72px; top: 842px; font-size: 20px; font-weight: 800; line-height: 1.6; }
+  .redline span { color: var(--o); }
+
+  /* cover 5:2 */
+  #cover { width: 2000px; height: 800px; }
+  #cover .photo { right: 0; top: 0; width: 800px; height: 800px; background: url(img/cover_white_bg.jpg) center/cover; }
+  #cover .photo::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, #fff 0, rgba(255,255,255,0) 22%); }
+  #cover .screen { position: absolute; left: 264px; top: 228px; width: 236px; height: 180px; font: 800 26px/1.35 "JetBrains Mono"; color: #d9f2e2; }
+  #cover .screen em { font-style: normal; color: #fff; display: inline-block; width: 14px; height: 28px; background: #d9f2e2; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<!-- COVER 5:2 -->
+<div class="board" id="cover">
+  <div class="photo"><div class="screen">&gt; ONLINE<br>&gt; 24h × 7<br>&gt; 不关机 <em></em></div></div>
+  <div class="kick" style="left:96px;top:70px;font-size:22px">OPENAI DOTS · <b>2026.09.29 上岗</b></div>
+  <div class="serif" style="left:96px;top:166px;font-size:92px;font-weight:900;line-height:1.16;white-space:nowrap">
+    OpenAI 的 AI 同事 <span style="position:relative">$100 起<svg class="scribble" style="left:-6px;top:96px" width="330" height="40"><path d="M4 26 C60 8, 120 30, 180 12 S 290 22, 322 8"/></svg></span><br>
+    开源版一周冒出<span class="mk">三个平替</span>
+  </div>
+    <div class="note" style="left:820px;top:84px;font-size:52px;transform:rotate(-5deg)">开源跑一次 0.001 美元 ↘</div>
+  <div class="mono" style="left:100px;top:440px;font-size:28px;font-weight:800;line-height:1.7">
+    实测：GitHub 开源版 · 73 秒 · 花了 <span style="color:var(--o)">$0.001</span><br>
+    <span style="color:var(--dim);font-weight:500">三个平替怎么选 + 怎么拿它接单</span>
+  </div>
+  <div style="left:96px;top:640px;display:flex;align-items:center;gap:22px">
+    <div style="width:104px;height:104px;border-radius:50%;border:5px solid var(--o);background:url('img/avatar.jpg') 58% 30%/165%;"></div>
+    <div><div style="font:900 34px 'Noto Serif SC'">嘉佬 Lief</div><div class="mono" style="font-size:20px;color:var(--dim);font-weight:800">@liefmusk · AI 搞钱实测</div></div>
+  </div>
+</div>
+
+<!-- 1 BADGE -->
+<div class="board" id="info1">
+  <div class="kick">NO.01 / 04 · <b>员工档案</b></div>
+  <h1>Dots 卖的不是聪明，<br><span class="mk">是一台不关机的电脑</span></h1>
+  <div class="strap"></div>
+  <div class="badge sheet"><div class="slot"></div>
+    <div class="head">常驻 AI 同事<span>OPENAI</span></div>
+    <div class="photo"><i></i></div>
+    <div class="name">Dots<small>STAFF · NO.000001</small></div>
+    <dl>
+      <dt>入职</dt><dd>2026-09-29</dd>
+      <dt>大脑</dt><dd>GPT-6 Astra</dd>
+      <dt>工位</dt><dd>自己的云电脑 + 浏览器</dd>
+      <dt>技能</dt><dd>连 4000+ 个应用</dd>
+      <dt>找它</dt><dd>Slack · Teams · 打电话</dd>
+    </dl>
+    <div class="bar"></div>
+  </div>
+  <div class="terms">
+    <h3>钱怎么收（第一个 Dot 含在套餐里）</h3>
+    <div class="row">Pro 100<b>$100/月</b></div>
+    <div class="row">Pro 200<b>$200/月</b></div>
+    <div class="row">Pro 500（更高额度 + Ultrafast）<b>$500/月</b></div>
+    <div class="fine">附加条款：Free、Go、Plus <u>没有</u>；Pro 在欧洲经济区、英国、瑞士<u>暂不开放</u>；首月额度放宽；和 Dot 聊天不计量，交给 Codex / Work 的活<u>按额度算</u>。</div>
+  </div>
+  <div class="note" style="left:700px;top:240px;font-size:44px;transform:rotate(-6deg)">小字才是重点 ↓</div>
+  <div class="eq"><div>大模型</div><b>+</b><div>不关机浏览器</div><b>+</b><div>应用接口</div></div>
+  <div class="note" style="left:72px;top:846px;font-size:36px;transform:rotate(-2deg)">拆开看，三样开源都有 ↑</div>
+  <div class="foot"><span>来源：OpenAI 官方发布 · implicator · beam.ai（2026-10-06）</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 2 RESUMES -->
+<div class="board" id="info2">
+  <div class="kick">NO.02 / 04 · <b>三份简历</b></div>
+  <h1>三个平替，<span class="mk">只有一个今天就能上岗</span></h1>
+  <div class="cv sheet" style="left:72px;transform:rotate(-1.6deg)"><div class="clip"></div>
+    <h4>feder-cr/dots</h4><div class="meta">约 2600★ · MIT · 任意 OpenRouter 模型</div>
+    <div class="k">上手</div><div class="v">一条命令，一分钟跑起来</div>
+    <div class="k">擅长</div><div class="v">盯公开网页：比价、监控竞品、抓榜单；改过内核的 Firefox</div>
+    <div class="k">短板</div><div class="v">没有邮箱/日历/Slack 接口</div>
+    <div class="verdict">今天就能用</div>
+    <div class="stamp" style="right:22px;bottom:70px">录用</div>
+  </div>
+  <div class="cv sheet" style="left:574px;top:312px;transform:rotate(1deg)"><div class="clip"></div>
+    <h4>open-dot</h4><div class="meta">约 580★ · Composio 社区 · Mac 应用</div>
+    <div class="k">上手</div><div class="v">装 Mac 应用 + 填 key</div>
+    <div class="k">擅长</div><div class="v">最像 Dots：定时、触发器、密码箱、打电话、1500+ 应用</div>
+    <div class="k">短板</div><div class="v">只有 Mac；关机任务就跳过</div>
+    <div class="verdict">功能最全</div>
+  </div>
+  <div class="cv sheet" style="left:1076px;top:304px;transform:rotate(-.6deg)"><div class="clip"></div>
+    <h4>OpenDots</h4><div class="meta">3700★ · MIT · CopilotKit</div>
+    <div class="k">上手</div><div class="v">改代码模板，开发者向</div>
+    <div class="k">擅长</div><div class="v">网页 + 手机 + Slack + 通话，界面最像成品</div>
+    <div class="k">短板</div><div class="v">Alpha 阶段；「模板，不是产品」，对话要接它家服务</div>
+    <div class="verdict">做自己品牌的产品</div>
+  </div>
+  <div class="note" style="left:1150px;top:200px;font-size:44px;transform:rotate(-4deg)">星最多≠最好用</div>
+  <div class="foot"><span>实测：feder-cr/dots · Product Hunt 前三名 · 73 秒 · $0.001</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 3 RECEIPT -->
+<div class="board" id="info3">
+  <div class="kick">NO.03 / 04 · <b>工资条 · 900 个任务/月</b></div>
+  <h1>同样一个月的活，<span class="mk">差的不是钱</span>，<br>是谁拿着遥控器</h1>
+  <div class="rcpt sheet">
+    <div class="hdr"><span>每天 30 个任务 × 30 天 = 900 次</span><span>单位：美元 / 月</span></div>
+    <div class="line"><div class="n">开源 + GLM-5.3-Flash<small>我实测：$0.001 / 次</small></div><div class="b" style="width:0.4%"></div><div class="p">$1</div></div>
+    <div class="line"><div class="n">开源 + Claude Sonnet 5.5<small>约 $0.02 / 次（估算）</small></div><div class="b" style="width:3.6%"></div><div class="p">$18</div></div>
+    <div class="line"><div class="n">开源 + GPT-6 Astra<small>Dots 同款模型，约 $0.1 / 次</small></div><div class="b" style="width:18%"></div><div class="p">$90</div></div>
+    <div class="line big"><div class="n">ChatGPT Pro 100<small>含第一个 Dot + ChatGPT 其他功能</small></div><div class="b" style="width:20%"></div><div class="p">$100</div></div>
+    <div class="line big" style="border-bottom:0"><div class="n">ChatGPT Pro 500<small>更高额度 + Ultrafast</small></div><div class="b" style="width:100%"></div><div class="p">$500</div></div>
+    <div class="fine">第二、三行 = 实测花费 × OpenRouter 价格倍数（2026-10-06）估算。套餐还含 ChatGPT 其他功能，不是同口径的纯成本对比。<br>开源的隐藏成本：1-2 小时搭建 + 电脑要开着 + 自己修。</div>
+  </div>
+  <div class="note" style="left:640px;top:380px;font-size:44px;transform:rotate(-5deg)">← 我真跑过，就这么点</div>
+  <div class="note" style="left:1080px;top:190px;font-size:50px;transform:rotate(-6deg)">套餐 ≠ 纯成本</div>
+  <div class="foot"><span>来源：OpenRouter 模型价格 · 嘉佬实测</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 4 QUOTE -->
+<div class="board" id="info4">
+  <div class="kick">NO.04 / 04 · <b>劳务派遣报价单</b></div>
+  <h1>别卖 AI，<span class="mk">卖一个已经上岗的员工</span></h1>
+  <div class="quote sheet">
+    <div class="qh">可派遣岗位<span>DISPATCH LIST</span></div>
+    <div class="post"><i>01</i><div><b>价格监控员</b><p>电商、外贸：每天巡一遍竞品价格和库存，有变化就报</p></div></div>
+    <div class="post"><i>02</i><div><b>线索收集员</b><p>B 端生意：从名录、展会名单整理公司、网址、联系入口</p></div></div>
+    <div class="post" style="border-bottom:0"><i>03</i><div><b>选题情报员</b><p>做内容的：每天抄 Product Hunt、热榜（我拿它干的第一件活）</p></div></div>
+  </div>
+  <div class="sticky">
+    <div class="tape" style="left:170px;top:-16px;transform:rotate(-3deg)"></div>
+    <div class="row"><small>搭建 · 一次性</small><b>¥2000–5000</b></div>
+    <div class="row"><small>维护 · 每月</small><b>¥300–600</b></div>
+    <div class="row"><small>模型费 · 实报实销</small><b>几块到几十块</b></div>
+    <div class="row anchor" style="border:0"><small>客户心里的锚点</small><b>OpenAI $100 起</b></div>
+  </div>
+  <div class="redline"><span>红线：</span>只抓公开页面，要登录只用客户授权的账号 ｜ 守 robots 和服务条款，不绕验证码，控制频率<br>发邮件、付钱、改数据一律设成「先问人」</div>
+  <div class="foot"><span>报价是我的建议，不是市场统计，按客户调整</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+</body>
+</html>

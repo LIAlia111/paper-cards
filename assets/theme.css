@@ -1,0 +1,43 @@
+/* paper-cards theme — white desk, black ink, ONE marker colour, handwritten notes, real paper props.
+   Every board is a fixed-size .board; children are absolutely positioned.
+   Change the accent with :root { --o: <colour>; --hl: <same colour at ~28% alpha>; } */
+@import url("https://fonts.googleapis.com/css2?family=Long+Cang&family=Noto+Serif+SC:wght@700;900&family=JetBrains+Mono:wght@500;800&display=swap");
+
+:root { --ink: #161514; --dim: #6d6a64; --o: #ff5b14; --hl: rgba(255,91,20,.28); --paper: #fffefb; --line: #d9d5cc; --kraft: #e9dcc3; --sticky: #ffe8d6; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #888; font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif; color: var(--ink); }
+
+/* board = one image. 1600x1000 for body images, add .wide for a 2000x800 (5:2) cover */
+.board { width: 1600px; height: 1000px; position: relative; overflow: hidden; margin: 0 0 40px; background: #fff; }
+.board.wide { width: 2000px; height: 800px; }
+.board > * { position: absolute; }
+
+/* type */
+.serif { font-family: "Noto Serif SC", "Songti SC", serif; }
+.mono { font-family: "JetBrains Mono", Consolas, monospace; }
+.kick { left: 72px; top: 64px; font: 800 18px "JetBrains Mono", monospace; letter-spacing: .2em; color: var(--dim); }
+.kick b { color: var(--o); }
+h1 { left: 72px; top: 100px; font-family: "Noto Serif SC", serif; font-size: 66px; font-weight: 900; line-height: 1.18; letter-spacing: -.01em; }
+.mk { background: linear-gradient(transparent 58%, var(--hl) 58%, var(--hl) 92%, transparent 92%); padding: 0 4px; }
+.foot { left: 72px; right: 72px; bottom: 34px; display: flex; justify-content: space-between; font: 500 16px "JetBrains Mono", monospace; color: var(--dim); border-top: 1.5px solid var(--ink); padding-top: 12px; }
+
+/* hand annotations: orange handwriting + svg marker strokes */
+.note { position: absolute; font-family: "Long Cang", "STXingkai", cursive; color: var(--o); line-height: 1.1; white-space: nowrap; }
+svg.scribble { position: absolute; overflow: visible; }
+svg.scribble path { fill: none; stroke: var(--o); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* paper + props */
+.sheet { background: var(--paper); box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 14px 34px rgba(40,30,10,.10); }
+.tape { position: absolute; width: 120px; height: 34px; background: rgba(236,226,200,.75); box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+.clip { position: absolute; top: -22px; right: 56px; width: 34px; height: 86px; border: 5px solid #9a958c; border-radius: 17px; }
+.stamp { position: absolute; color: var(--o); border: 6px double var(--o); border-radius: 50%; width: 170px; height: 170px; display: grid; place-items: center; font: 900 54px "Noto Serif SC"; transform: rotate(-14deg); opacity: .9; mix-blend-mode: multiply; }
+.stamp.rect { border-radius: 10px; width: auto; height: auto; padding: 8px 22px; font-size: 40px; }
+.sticky { background: var(--sticky); box-shadow: 0 2px 2px rgba(0,0,0,.06), 0 18px 30px rgba(120,60,10,.14); }
+.hatch { border: 2px solid var(--ink); background: repeating-linear-gradient(-45deg, var(--ink) 0 2px, transparent 2px 8px); }
+.hatch.o { border-color: var(--o); background: repeating-linear-gradient(-45deg, var(--o) 0 3px, transparent 3px 8px); }
+.barcode { background: repeating-linear-gradient(90deg, var(--ink) 0 3px, transparent 3px 6px, var(--ink) 6px 7px, transparent 7px 11px, var(--ink) 11px 15px, transparent 15px 17px); }
+.perf { border-left: 3px dashed var(--line); }
+.zigzag::after { content: ""; position: absolute; left: 0; right: 0; bottom: -14px; height: 14px; background: conic-gradient(from -45deg at 50% 0, var(--paper) 90deg, transparent 0) 0 0/22px 14px; }
+.grid-paper { background-color: var(--paper); background-image: linear-gradient(#e7e2d8 1px, transparent 1px), linear-gradient(90deg, #e7e2d8 1px, transparent 1px); background-size: 28px 28px; }
+.ruled { background-color: var(--paper); background-image: linear-gradient(transparent 43px, #dcd6ca 43px, #dcd6ca 44px); background-size: 100% 44px; }
+.kraft { background: var(--kraft); box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 14px 34px rgba(40,30,10,.12); }

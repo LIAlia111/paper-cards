@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../assets/theme.css">
+<style>
+  /* 05 newspaper clipping */
+  .paper { left: 72px; top: 270px; width: 1456px; height: 600px; padding: 34px 48px; transform: rotate(-.8deg); }
+  .paper .mast { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 4px double var(--ink); padding-bottom: 8px; }
+  .paper .mast b { font: 900 52px "Noto Serif SC"; letter-spacing: .1em; }
+  .paper .mast span { font: 500 16px "JetBrains Mono"; color: var(--dim); }
+  .paper .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 34px; margin-top: 22px; }
+  .paper .it { padding: 30px 0 34px; border-bottom: 1px solid var(--line); position: relative; }
+  .paper .it b { font: 900 42px "Noto Serif SC"; text-decoration: line-through; text-decoration-color: var(--o); text-decoration-thickness: 4px; }
+  .paper .it p { font-size: 25px; line-height: 1.5; color: #4a4741; font-weight: 600; margin-top: 6px; }
+
+  /* 06 train ticket */
+  .ticket { left: 160px; top: 300px; width: 1280px; height: 520px; border-radius: 18px; display: grid; grid-template-columns: 1fr 300px; overflow: hidden; transform: rotate(-1.5deg); }
+  .ticket .main { padding: 40px 54px; position: relative; }
+  .ticket .main .no { font: 800 22px "JetBrains Mono"; color: var(--o); letter-spacing: .15em; }
+  .ticket .route { display: flex; align-items: center; gap: 30px; margin-top: 30px; }
+  .ticket .route div b { display: block; font: 900 64px "Noto Serif SC"; }
+  .ticket .route div small { font: 800 17px "JetBrains Mono"; color: var(--dim); letter-spacing: .15em; }
+  .ticket .route i { font: 400 90px "Long Cang"; color: var(--o); font-style: normal; }
+  .ticket dl { display: grid; grid-template-columns: repeat(3, auto); gap: 6px 60px; margin-top: 46px; justify-content: start; }
+  .ticket dt { font: 800 15px "JetBrains Mono"; color: var(--dim); letter-spacing: .15em; }
+  .ticket dd { font: 900 30px "Noto Serif SC"; }
+  .ticket .stub { border-left: 3px dashed var(--line); padding: 40px 30px; background: #fbf8f1; display: flex; flex-direction: column; justify-content: space-between; }
+  .ticket .stub b { font: 900 76px "Noto Serif SC"; color: var(--o); }
+
+  /* 07 clipboard checklist */
+  .board-clip { left: 600px; top: 236px; width: 560px; height: 690px; background: #c9b48e; border-radius: 22px; transform: rotate(1.5deg); box-shadow: 0 18px 34px rgba(60,40,10,.18); }
+  .board-clip .metal { position: absolute; left: 50%; top: -18px; width: 200px; height: 56px; margin-left: -100px; background: #b8b3aa; border-radius: 12px; border: 3px solid #8e897f; }
+  .board-clip .page { position: absolute; left: 26px; right: 26px; top: 50px; bottom: 26px; padding: 34px 34px; }
+  .board-clip h3 { font: 900 32px "Noto Serif SC"; border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 8px; }
+  .chk { display: grid; grid-template-columns: 40px 1fr; align-items: center; padding: 14px 0; border-bottom: 1px dotted #b9b4aa; font-size: 27px; font-weight: 800; }
+  .chk i { width: 26px; height: 26px; border: 2.5px solid var(--ink); position: relative; font-style: normal; }
+  .chk i::after { content: "✓"; position: absolute; left: 2px; top: -26px; font: 400 52px "Long Cang"; color: var(--o); }
+
+  /* 08 polaroids */
+  .pola { width: 470px; padding: 18px 18px 70px; background: #fff; box-shadow: 0 2px 3px rgba(0,0,0,.1), 0 18px 34px rgba(40,30,10,.14); }
+  .pola .ph { width: 434px; height: 272px; background-size: cover; background-position: center; border: 1px solid #ddd; }
+  .pola p { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font: 400 40px "Long Cang"; color: var(--ink); }
+
+  /* 09 tear-off calendar */
+  .cal { left: 72px; top: 270px; width: 560px; height: 640px; overflow: hidden; transform: rotate(-2deg); }
+  .cal .top { height: 90px; background: var(--o); color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 0 34px; font: 900 34px "Noto Serif SC"; }
+  .cal .top span { font: 800 20px "JetBrains Mono"; letter-spacing: .15em; }
+  .cal .day { text-align: center; font: 900 300px/1 "Noto Serif SC"; margin-top: 40px; }
+  .cal .wk { text-align: center; font: 800 26px "JetBrains Mono"; color: var(--dim); letter-spacing: .3em; margin-top: 26px; }
+  .cal .holes { position: absolute; top: 18px; left: 0; right: 0; display: flex; justify-content: space-around; }
+  .cal .holes i { width: 22px; height: 22px; border-radius: 50%; background: #fff; }
+  .almanac { left: 720px; top: 300px; width: 800px; }
+  .almanac .row { display: grid; grid-template-columns: 120px 1fr; align-items: start; padding: 22px 0; border-bottom: 1.5px solid var(--ink); }
+  .almanac .row b { font: 900 64px "Noto Serif SC"; line-height: 1; }
+  .almanac .row p { font-size: 28px; font-weight: 800; line-height: 1.6; }
+  .almanac .row.no b { color: var(--o); }
+
+  /* 10 envelope + letter */
+  .env { left: 860px; top: 420px; width: 660px; height: 420px; transform: rotate(4deg); }
+  .env::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 210px; background: linear-gradient(to bottom right, transparent 49.5%, rgba(0,0,0,.08) 50%, transparent 50.6%), linear-gradient(to bottom left, transparent 49.5%, rgba(0,0,0,.08) 50%, transparent 50.6%); }
+  .env .postmark { position: absolute; right: 40px; top: 34px; width: 120px; height: 140px; border: 3px dashed var(--o); display: grid; place-items: center; font: 900 30px "Noto Serif SC"; color: var(--o); }
+  .env .to { position: absolute; left: 60px; bottom: 60px; font: 400 52px "Long Cang"; }
+  .letter { left: 72px; top: 270px; width: 860px; height: 650px; padding: 50px 60px; transform: rotate(-1.2deg); line-height: 44px; font-size: 24px; font-weight: 600; }
+  .letter b { font-weight: 900; }
+  .letter .sig { font: 400 48px "Long Cang"; color: var(--o); }
+
+  /* 11 certificate */
+  .cert { left: 220px; top: 250px; width: 1160px; height: 680px; border: 3px solid var(--ink); outline: 10px double var(--ink); outline-offset: -26px; text-align: center; padding: 80px 120px; }
+  .cert .t { font: 900 70px "Noto Serif SC"; letter-spacing: .5em; }
+  .cert .en { font: 800 18px "JetBrains Mono"; letter-spacing: .4em; color: var(--dim); margin-top: 6px; }
+  .cert p { font-size: 30px; font-weight: 700; line-height: 1.9; margin-top: 50px; }
+  .cert p u { text-decoration: none; border-bottom: 2px solid var(--ink); padding: 0 16px; font: 400 44px "Long Cang"; color: var(--o); }
+  .cert .who { position: absolute; left: 120px; right: 120px; bottom: 86px; display: flex; justify-content: space-between; font: 800 20px "JetBrains Mono"; color: var(--dim); }
+
+  /* 12 boarding pass */
+  .bp { left: 120px; top: 300px; width: 1360px; height: 480px; border-radius: 22px; display: grid; grid-template-columns: 1fr 340px; overflow: hidden; transform: rotate(1.2deg); }
+  .bp .band { position: absolute; left: 0; right: 0; top: 0; height: 70px; background: var(--ink); color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 0 44px; font: 900 28px "Noto Serif SC"; }
+  .bp .band span { font: 800 18px "JetBrains Mono"; color: var(--o); letter-spacing: .2em; }
+  .bp .l { padding: 100px 44px 30px; }
+  .bp .ft { display: flex; align-items: center; gap: 40px; }
+  .bp .ft div b { display: block; font: 900 92px "JetBrains Mono"; letter-spacing: -.02em; }
+  .bp .ft div small { font-size: 22px; font-weight: 800; color: var(--dim); }
+  .bp .ft i { font: 400 70px "Long Cang"; color: var(--o); font-style: normal; }
+  .bp .sizes { display: flex; gap: 40px; margin-top: 30px; }
+  .bp .sizes div small { display: block; font: 800 15px "JetBrains Mono"; color: var(--dim); letter-spacing: .15em; }
+  .bp .sizes div b { font: 900 30px "Noto Serif SC"; }
+  .bp .r { border-left: 3px dashed var(--line); padding: 100px 34px 30px; background: #fbf8f1; position: relative; }
+  .bp .r .barcode { position: absolute; left: 34px; right: 34px; bottom: 34px; height: 80px; }
+
+  /* 13 index cards */
+  .ic { width: 450px; height: 470px; padding: 0; overflow: hidden; }
+  .ic .h { background: var(--ink); color: #fff; padding: 16px 26px; font: 800 18px "JetBrains Mono"; letter-spacing: .2em; display: flex; justify-content: space-between; }
+  .ic .h b { color: var(--o); }
+  .ic .body { padding: 12px 30px; font-size: 36px; font-weight: 800; line-height: 60px; }
+  .ic.ruled { background-image: linear-gradient(transparent 59px, #dcd6ca 59px, #dcd6ca 60px); background-size: 100% 60px; background-position: 0 4px; }
+  .ic .body em { font-style: normal; background: linear-gradient(transparent 58%, var(--hl) 58%); }
+
+  /* 14 ledger */
+  .ledger { left: 72px; top: 280px; width: 1456px; height: 600px; padding: 40px 56px; transform: rotate(-.6deg); }
+  .ledger table { width: 100%; border-collapse: collapse; }
+  .ledger th { text-align: left; font: 800 19px "JetBrains Mono"; color: var(--dim); letter-spacing: .15em; border-bottom: 2px solid var(--ink); padding: 8px 10px; background: var(--paper); }
+  .ledger td { padding: 40px 10px; font-size: 32px; font-weight: 800; border-bottom: 1px solid #cfc9bd; background: rgba(255,254,251,.7); }
+  .ledger td.n { font: 900 50px "Noto Serif SC"; text-align: right; }
+  .ledger tr.me td { color: var(--o); }
+  .ledger td small { display: block; font: 500 18px "JetBrains Mono"; color: var(--dim); margin-top: 4px; }
+
+  /* 15 kanban */
+  .kb { top: 280px; width: 452px; height: 620px; padding: 0 0 0; }
+  .kb .colh { font: 900 38px "Noto Serif SC"; padding: 0 0 12px; border-bottom: 3px solid var(--ink); margin-bottom: 26px; display: flex; justify-content: space-between; }
+  .kb .colh span { font: 800 16px "JetBrains Mono"; color: var(--dim); letter-spacing: .15em; padding-top: 12px; }
+  .pn { position: relative; width: 410px; padding: 30px 30px; margin: 0 0 34px 16px; font-size: 32px; font-weight: 800; line-height: 1.45; }
+  .pn small { display: block; font: 400 38px "Long Cang"; color: #8a5a3a; margin-top: 4px; }
+  .pn.w { background: #fff; box-shadow: 0 2px 2px rgba(0,0,0,.06), 0 12px 24px rgba(40,30,10,.1); }
+</style>
+</head>
+<body>
+
+<!-- 05 NEWSPAPER -->
+<div class="board" id="b05">
+  <div class="kick">PAPER-CARDS · <b>剪报</b></div>
+  <h1>一眼「AI 味」的配图，<span class="mk">都长这 6 样</span></h1>
+  <div class="paper sheet">
+    <div class="mast"><b>配图日报</b><span>今日禁用清单 · 第 001 期</span></div>
+    <div class="cols">
+      <div class="it"><b>霓虹发光</b><p>字和线条外面一圈光晕，像赛博夜店招牌</p></div>
+      <div class="it"><b>大面积渐变</b><p>背景从紫到蓝、从粉到橙，没有一块纯色</p></div>
+      <div class="it"><b>玻璃拟态</b><p>半透明磨砂卡片叠在模糊色块上</p></div>
+      <div class="it"><b>暗底网格</b><p>深蓝底 + 细网格线 + 角落里的光斑</p></div>
+      <div class="it"><b>emoji 当图标</b><p>🚀💡🔥 排成一列，每条前面一个</p></div>
+      <div class="it"><b>满屏强调色</b><p>三四种亮色同时抢眼，重点等于没有重点</p></div>
+    </div>
+  </div>
+  <div class="note" style="left:1170px;top:160px;font-size:56px;transform:rotate(-6deg)">全都别用 ✗</div>
+  <div class="foot"><span>paper-cards · 不像 AI 的配图</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 06 TICKET -->
+<div class="board" id="b06">
+  <div class="kick">PAPER-CARDS · <b>车票</b></div>
+  <h1>同一张图的内容，<span class="mk">换一身衣服</span></h1>
+  <div class="ticket sheet">
+    <div class="main">
+      <div class="no">车次 PC-001 · 单程</div>
+      <div class="route">
+        <div><small>出发</small><b>霓虹站</b></div><i>→</i>
+        <div><small>到达</small><b>白纸站</b></div>
+      </div>
+      <dl>
+        <dt>底色</dt><dt>强调色</dt><dt>字</dt>
+        <dd>白</dd><dd>只用 1 个</dd><dd>报纸衬线 + 手写</dd>
+      </dl>
+    </div>
+    <div class="stub"><div class="mono" style="font-weight:800;color:var(--dim);letter-spacing:.15em">票价</div><b>¥0</b><div class="barcode" style="height:70px"></div></div>
+  </div>
+  <div class="note" style="left:1080px;top:830px;font-size:48px;transform:rotate(-4deg)">内容一个字没改 ↑</div>
+  <div class="foot"><span>paper-cards · 不像 AI 的配图</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 07 CLIPBOARD -->
+<div class="board" id="b07">
+  <div class="kick">PAPER-CARDS · <b>夹板清单</b></div>
+  <h1>出图前，<br><span class="mk">逐条打勾</span></h1>
+  <div class="board-clip"><div class="metal"></div>
+    <div class="page sheet">
+      <h3>出图自检 7 条</h3>
+      <div class="chk"><i></i>只有一个强调色</div>
+      <div class="chk"><i></i>没有渐变、发光、网格</div>
+      <div class="chk"><i></i>字是打出来的，不会错</div>
+      <div class="chk"><i></i>每张图一个真实道具</div>
+      <div class="chk"><i></i>至少一处手写批注</div>
+      <div class="chk"><i></i>数字都写了出处</div>
+      <div class="chk" style="border:0"><i></i>缩到手机宽还看得清</div>
+    </div>
+  </div>
+  <div class="note" style="left:1150px;top:420px;font-size:46px;transform:rotate(-5deg)">← 第 3 条最值钱</div>
+  <div class="note" style="left:1150px;top:500px;font-size:34px;transform:rotate(-5deg);color:var(--dim)">AI 生图写中文，经常错字</div>
+  <div class="foot"><span>paper-cards · 不像 AI 的配图</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 08 POLAROIDS -->
+<div class="board" id="b08">
+  <div class="kick">PAPER-CARDS · <b>拍立得</b></div>
+  <h1>同一张信息图，<span class="mk">改了三版</span></h1>
+  <div class="pola" style="left:72px;top:300px;transform:rotate(-5deg)"><div class="ph" style="background-image:url(img/before_redblack.png)"></div><p>v1 · 红黑海报</p></div>
+  <div class="pola" style="left:566px;top:330px;transform:rotate(2deg)"><div class="ph" style="background-image:url(img/before_neon.png)"></div><p>v2 · 霓虹，被说太 AI</p></div>
+  <div class="pola" style="left:1060px;top:290px;transform:rotate(-1.5deg)"><div class="ph" style="background-image:url(img/after_paper.png)"></div><p>v3 · 白纸，过了</p><div class="tape" style="left:170px;top:-16px;transform:rotate(4deg)"></div></div>
+  <div class="note" style="left:1180px;top:740px;font-size:50px;transform:rotate(-5deg)">↑ 就用这版</div>
+  <div class="foot"><span>paper-cards · 不像 AI 的配图</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 09 CALENDAR -->
+<div class="board" id="b09">
+  <div class="kick">PAPER-CARDS · <b>撕页日历</b></div>
+  <div class="cal sheet"><div class="holes"><i></i><i></i><i></i></div>
+    <div class="top">2026 · 十月<span>OCT</span></div>
+    <div class="day">6</div>
+    <div class="wk">星期二</div>
+  </div>
+  <h1 style="left:720px">今日宜出图，<br><span class="mk">忌紫色渐变</span></h1>
+  <div class="almanac">
+    <div class="row"><b>宜</b><p>白底黑字 · 一种强调色 · 手写批注 · 真实纸张道具</p></div>
+    <div class="row no"><b>忌</b><p>霓虹发光 · 紫蓝渐变 · 玻璃拟态 · emoji 当图标</p></div>
+  </div>
+  <div class="note" style="left:760px;top:720px;font-size:44px;transform:rotate(-3deg)">老黄历也能当配图模板</div>
+  <div class="foot"><span>paper-cards · 不像 AI 的配图</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 10 LETTER -->
+<div class="board" id="b10">
+  <div class="kick">PAPER-CARDS · <b>交付信</b></div>
+  <div class="letter ruled">
+    王总您好：<br>
+    这次文章的 <b>4 张配图</b>已经做好，附件里有 PNG 和 HTML 源文件。<br>
+    想改字，直接改 HTML 里的文字，重新截图就行，<b>不会出错字</b>。<br>
+    想换颜色，改一行 <b>--o</b> 就换掉整套强调色。<br>
+    下周的图照这个风格继续出。<br>
+    <span class="sig">— 你的配图员</span>
+  </div>
+  <div class="env kraft"><div class="postmark">已交付</div><div class="to">致 王总 收</div></div>
+  <div class="note" style="left:960px;top:290px;font-size:46px;transform:rotate(-4deg)">交源文件，客户最放心</div>
+  <div class="foot"><span>paper-cards · 不像 AI 的配图（示例客户）</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 11 CERTIFICATE -->
+<div class="board" id="b11">
+  <div class="cert sheet">
+    <div class="t">合格证</div>
+    <div class="en">CERTIFICATE · NOT AI-LOOKING</div>
+    <p>兹证明 <u>本张配图</u> 已通过<br>「不像 AI」七项检定，准予发布。</p>
+    <div class="who"><span>检定员：paper-cards</span><span>2026 年 10 月 6 日</span></div>
+    <div class="stamp" style="right:150px;bottom:110px">通过</div>
+  </div>
+  <div class="foot"><span>paper-cards · 不像 AI 的配图</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 12 BOARDING PASS -->
+<div class="board" id="b12">
+  <div class="kick">PAPER-CARDS · <b>登机牌</b></div>
+  <h1>一份源文件，<span class="mk">飞三个平台</span></h1>
+  <div class="bp sheet">
+    <div class="band">BOARDING PASS · 配图航空<span>FLIGHT PC2026</span></div>
+    <div class="l">
+      <div class="ft"><div><b>HTML</b><small>源文件</small></div><i>✈</i><div><b>PNG</b><small>想要几张截几张</small></div></div>
+      <div class="sizes">
+        <div><small>X 长文封面</small><b>2000 × 800</b></div>
+        <div><small>正文配图</small><b>1600 × 1000</b></div>
+        <div><small>小红书竖图</small><b>1080 × 1440</b></div>
+      </div>
+    </div>
+    <div class="r"><div class="mono" style="font-weight:800;color:var(--dim);letter-spacing:.15em">座位</div><div class="serif" style="font-size:80px;font-weight:900">1A</div><div class="barcode"></div></div>
+  </div>
+  <div class="note" style="left:1060px;top:820px;font-size:44px;transform:rotate(-4deg)">改个宽高就能换平台</div>
+  <div class="foot"><span>paper-cards · 不像 AI 的配图</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 13 INDEX CARDS -->
+<div class="board" id="b13">
+  <div class="kick">PAPER-CARDS · <b>记忆卡</b></div>
+  <h1>装好之后，<span class="mk">跟 AI 说这 3 句</span></h1>
+  <div class="ic sheet" style="left:72px;top:300px;transform:rotate(-3deg)"><div class="h">CARD<b>01</b></div><div class="body">「把这篇文章的 4 个小节，各做一张 <em>paper-cards</em> 配图」</div></div>
+  <div class="ic sheet" style="left:575px;top:320px;transform:rotate(1.5deg)"><div class="h">CARD<b>02</b></div><div class="body">「这组数据做成<em>小票</em>，最贵那行用强调色」</div></div>
+  <div class="ic sheet" style="left:1078px;top:296px;transform:rotate(-1deg)"><div class="h">CARD<b>03</b></div><div class="body">「同样内容，再出一张 <em>1080×1440</em> 的小红书竖图」</div></div>
+  <div class="foot"><span>paper-cards · Claude Code / Codex / Cursor 都能用</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 14 LEDGER -->
+<div class="board" id="b14">
+  <div class="kick">PAPER-CARDS · <b>账本</b></div>
+  <h1>一张配图的成本账</h1>
+  <div class="ledger sheet grid-paper">
+    <table>
+      <tr><th>做法</th><th>中文会不会错</th><th style="text-align:right">每张</th></tr>
+      <tr><td>gpt-image-2（low）直接出图<small>我 9 月实测，OpenRouter 计费</small></td><td>这档没错，但要逐字检查</td><td class="n">≈ ¥0.12</td></tr>
+      <tr><td>Cloudflare Workers AI 出底图<small>flux-1-schnell，免费额度内</small></td><td>不带字，字要另外叠</td><td class="n">¥0</td></tr>
+      <tr class="me"><td>paper-cards：HTML + 浏览器截图<small>本地 Chrome，无头模式</small></td><td>字是打的，不会错</td><td class="n">¥0</td></tr>
+    </table>
+  </div>
+  <div class="note" style="left:1000px;top:150px;font-size:50px;transform:rotate(-5deg)">贵的不是钱，是返工</div>
+  <div class="foot"><span>价格以我自己的实测记录为准（2026-09 / 10）</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+<!-- 15 KANBAN -->
+<div class="board" id="b15">
+  <div class="kick">PAPER-CARDS · <b>便利贴墙</b></div>
+  <h1>接一单配图，<span class="mk">流程就三栏</span></h1>
+  <div class="kb" style="left:72px"><div class="colh">待办<span>TODO</span></div>
+    <div class="pn sticky" style="transform:rotate(-2deg)">客户发来文章原文<small>先问清发哪个平台</small></div>
+    <div class="pn w" style="transform:rotate(1.5deg)">挑出要配图的 3-5 段<small>一段一个观点</small></div>
+  </div>
+  <div class="kb" style="left:574px"><div class="colh">进行中<span>DOING</span></div>
+    <div class="pn sticky" style="transform:rotate(1.8deg)">每段选一个纸张道具<small>工牌 / 小票 / 简历…</small></div>
+    <div class="pn w" style="transform:rotate(-1.2deg)">AI 写 HTML，截图<small>一张几分钟</small></div>
+  </div>
+  <div class="kb" style="left:1076px"><div class="colh">完成<span>DONE</span></div>
+    <div class="pn sticky" style="transform:rotate(-1.5deg)">交 PNG + HTML 源文件<small>客户能自己改字</small></div>
+    <div class="stamp rect" style="left:150px;top:300px">已结单</div>
+  </div>
+  <div class="foot"><span>paper-cards · 不像 AI 的配图</span><span>嘉佬 LIEF @liefmusk</span></div>
+</div>
+
+</body>
+</html>
